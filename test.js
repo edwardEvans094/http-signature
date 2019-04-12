@@ -3,7 +3,7 @@ var https = require('https');
 
 require('dotenv').config()
 
-const gatewayEndpoint = 'https://dev-stats-gateway.knstats.com/'
+const gatewayEndpoint = process.env.ENPOINT
 var fs = require('fs');
 
 
