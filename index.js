@@ -1,7 +1,6 @@
 
 const fetch = require('node-fetch');
 const Crypto = require('crypto');
-const axios = require('axios');
 const FETCH_TIMEOUT = 20000;
 
 module.exports = class HttpProvider {
@@ -38,13 +37,14 @@ module.exports = class HttpProvider {
     }
 
     let url = this.hostUrl + path
-    const digest = body ? 'SHA-256=' + Crypto.createHash('SHA256').update(data).digest('base64') : ''
+    const dataString = JSON.stringify(data)
+    const digest = body ? 'SHA-256=' + Crypto.createHash('SHA256').update(dataString).digest('base64') : ''
     let signString = ''
 
     fetchParams.headers = {
       'digest': digest,
       'nonce': new Date().getTime(),
-      'content-length': Object.keys(data).length ? Buffer.byteLength(data) : 0,
+      'content-length': Object.keys(data).length ? Buffer.byteLength(dataString) : 0,
       'access-control-request-headers': 'nonce, digest, content-length, signature'
     }
 
@@ -69,6 +69,9 @@ module.exports = class HttpProvider {
   
     if(method){
       fetchParams.method = method
+      if(method == "POST" && body){
+        fetchParams.body = dataString
+      }
     }
     
     return this.fetchData(url, fetchParams)
@@ -77,25 +80,14 @@ module.exports = class HttpProvider {
   fetchData(url, params){
     return new Promise((resolve, reject) => {
       fetch(url, params)
-        .then((response) => {
-          if (!response.ok) {
-            reject(response.statusText);
-          } else {
-            return response.text()
-          }
+      .then(res => res.json())
+      .then(json => resolve(json))
+      .catch((err) => {
+        reject({
+          error: err,
+          url: url
         })
-        .then(dataStr => {
-          return JSON.parse(dataStr)
-        })
-        .then(data => {
-          resolve(data)
-        })
-        .catch((err) => {
-          reject({
-            error: err,
-            url: url
-          })
-        })
+      })
     })
 
   }
