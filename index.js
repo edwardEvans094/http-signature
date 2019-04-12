@@ -38,14 +38,13 @@ module.exports = class HttpProvider {
     }
 
     let url = this.hostUrl + path
-    data = JSON.stringify(data)
     const digest = body ? 'SHA-256=' + Crypto.createHash('SHA256').update(data).digest('base64') : ''
     let signString = ''
 
     fetchParams.headers = {
       'digest': digest,
       'nonce': new Date().getTime(),
-      'content-length': Buffer.byteLength(data),
+      'content-length': Object.keys(data).length ? Buffer.byteLength(data) : 0,
       'access-control-request-headers': 'nonce, digest, content-length, signature'
     }
 
@@ -76,15 +75,12 @@ module.exports = class HttpProvider {
   }
 
   fetchData(url, params){
-    console.log('***************', url, params)
     return new Promise((resolve, reject) => {
       fetch(url, params)
         .then((response) => {
-          console.log("********** res", response)
           if (!response.ok) {
             reject(response.statusText);
           } else {
-
             return response.text()
           }
         })
