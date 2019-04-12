@@ -3,11 +3,11 @@ var https = require('https');
 
 require('dotenv').config()
 
-const gatewayEndpoint = process.env.ENPOINT
+const gatewayEndpoint = process.env.ENDPOINT
 var fs = require('fs');
 
 
-console.log("_____________", process.env.KEY_ID, process.env.KEY_STRING)
+console.log("_____________", process.env.ENDPOINT, process.env.KEY_ID, process.env.KEY_STRING)
 const provider = new HttpProvider(gatewayEndpoint, process.env.KEY_ID, process.env.KEY_STRING)
 
 
