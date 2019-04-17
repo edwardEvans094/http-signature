@@ -1,6 +1,6 @@
 # http-signatures
 
-http-signatures is a node.js library that has client and server components
+http-signatures is a node.js library 
 for [HTTP Signature Scheme](https://tools.ietf.org/html/draft-cavage-http-signatures-10).
 
 ## Usage
