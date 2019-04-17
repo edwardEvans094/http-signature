@@ -1,8 +1,10 @@
 {
   "name": "http-signatures",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "nodejs library for draft-cavage-http-signatures-10",
   "main": "index.js",
+  "author": "Tuan Nguyen",
+  "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
     "dotenv": "^7.0.0",
